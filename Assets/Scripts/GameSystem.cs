@@ -19,10 +19,10 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
     //[SerializeField] string _iOsAdUnitId = "Interstitial_iOS";
     string _adUnitId;
 
-    float adUnitProbability = 0.5f;
+    float adUnitProbability = 0.4f;
     int adUnitCdSeconds = 30;
     int adUnitCdMax = 10;
-    int adUnitCdMin = 3;
+    int adUnitCdMin = 4;
     public int adUnitCd = 0;
 
     public static GameSystem instance;
@@ -242,7 +242,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
 
             //показывается не чаще раз в 3(?) игры, не реже раз в 8(?)
             //Debug.Log("adUnitCd" + adUnitCd + " vs prob"+ adUnitProbability + " : min"+ adUnitCdMin + " max" + adUnitCdMax);
-            if (((Random.value < adUnitProbability) && (adUnitCd >= adUnitCdMin)) || (adUnitCd >= adUnitCdMax))
+            if (((Random.value < adUnitProbability) && (adUnitCd > adUnitCdMin)) || (adUnitCd > adUnitCdMax))
             {
                 adUnitCd = 0;
                 SaveSystem.instance.adUnitCd = adUnitCd;
