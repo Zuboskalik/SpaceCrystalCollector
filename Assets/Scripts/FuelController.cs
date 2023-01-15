@@ -8,7 +8,7 @@ public class FuelController : MonoBehaviour
     public float timer;
     private new Rigidbody2D rigidbody2D;
     float timerMultiplier = 20;
-    float refuelMultiplier = 0.08f;
+    float refuelMultiplier = 0.04f;
     float impulseMultiplier = 2.0f;
 
     // Start is called before the first frame update

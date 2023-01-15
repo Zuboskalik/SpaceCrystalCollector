@@ -19,10 +19,10 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
     //[SerializeField] string _iOsAdUnitId = "Interstitial_iOS";
     string _adUnitId;
 
-    float adUnitProbability = 0.4f;
+    float adUnitProbability = 0.6f;
     int adUnitCdSeconds = 30;
     int adUnitCdMax = 10;
-    int adUnitCdMin = 4;
+    int adUnitCdMin = 3;
     public int adUnitCd = 0;
 
     public static GameSystem instance;
@@ -186,7 +186,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         }
         else
         {
-            //Debug.Log("Showing Ad: false: !Bridge.advertisement.isBannerSupported");
+            Debug.Log("Showing Ad: false: !Bridge.advertisement.isBannerSupported");
         }
 
         isMusicEnabled = SaveSystem.instance.isMusicEnabled;
@@ -252,7 +252,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
                 ShowAd();
             }
             else {
-                Debug.Log("adUnitCd:" + adUnitCd);
+                //Debug.Log("adUnitCd:" + adUnitCd);
             }
         }
                 
