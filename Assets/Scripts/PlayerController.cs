@@ -61,14 +61,8 @@ public class PlayerController : MonoBehaviour
         }
         if (1.0f < pos.y)
         {
-            pointer.GetComponent<SpriteRenderer>().enabled = true;
-            pointer.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(pos.x, 0.75f, pos.z));
-
-            if (1.5f < pos.y)
-            {
-                this.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(pos.x, 1.1f, pos.z));
-                pointer.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(pos.x, 0.75f, pos.z));
-            }
+            rigidbody2D.velocity = new Vector2(pos.x, 0);
+            this.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(pos.x, 1.0f, pos.z));
         }
         else
         {

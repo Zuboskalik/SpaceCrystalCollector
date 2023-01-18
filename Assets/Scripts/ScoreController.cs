@@ -47,6 +47,7 @@ public class ScoreController : MonoBehaviour
     {
         if (coll.gameObject.tag == "Player")
         {
+            coll.gameObject.GetComponent<PlayerController>().GetComponent<AudioSource>().Play();
             GameSystem.instance.updateScore(timer * scoreMultiplier);
             coll.gameObject.GetComponent<PlayerController>().GetComponent<Rigidbody2D>().AddForce(transform.up * timer);
 

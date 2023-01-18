@@ -89,12 +89,16 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         localeStrings.Add("ru_Fuel", "Топливо");
         localeStrings.Add("en_Fuel", "Fuel");
 
-        localeStrings.Add("ru_TutorialControl", "для полета нажимайте A/D или стрелки");
-        localeStrings.Add("en_TutorialControl", "press A/D or Left/Right buttons to fly");
+        localeStrings.Add("ru_TutorialControl", "для полета удерживайте A/D или стрелки");
+        localeStrings.Add("en_TutorialControl", "press and hold A/D or Left/Right buttons to fly");
+        localeStrings.Add("ru_TutorialControlMobile", "для полета нажмите и держите правую/левую часть экрана");
+        localeStrings.Add("en_TutorialControlMobile", "press and hold left/right side of the screen to fly");
         localeStrings.Add("ru_TutorialFuel", "Заправляйте топливо");
         localeStrings.Add("en_TutorialFuel", "Refuel to fly longer");
         localeStrings.Add("ru_TutorialPressAny", "Нажмите любую кнопку управления чтобы начать");
         localeStrings.Add("en_TutorialPressAny", "Press any control button to start");
+        localeStrings.Add("ru_TutorialPressAnyMobile", "Нажмите на экран чтобы начать");
+        localeStrings.Add("en_TutorialPressAnyMobile", "Touch screen to start");
         localeStrings.Add("ru_TutorialGround", "Не разбейте корабль");
         localeStrings.Add("en_TutorialGround", "Don't touch the ground");
     }
@@ -192,9 +196,18 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         isMusicEnabled = SaveSystem.instance.isMusicEnabled;
         musicButton.GetComponent<Image>().color = isMusicEnabled ? Color.white : Color.red;
 
+        Debug.Log("Bridge.device.type:" + Bridge.device.type.ToString());
+        if (Bridge.device.type.ToString() == "Desktop")
+        {
+            tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
+        } else
+        {
+            tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControlMobile"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAnyMobile"];
+        }
+
         tutorialObject.transform.Find("TextTutorial (1)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"];
         tutorialObject.transform.Find("TextTutorial (2)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialFuel"];
-        tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialPressAny"];
+        //tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialPressAny"];
         tutorialObject.transform.Find("TextTutorial (4)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialGround"];
         updateScore(0);
     }
