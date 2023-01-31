@@ -251,7 +251,14 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
             finishUi.GetComponent<TextMeshProUGUI>().text = "\t"+localeStrings[localeCurrent + "_Score"] + ": " + (int)score + "\n\t"+ localeStrings[localeCurrent + "_TopScore"] + ": "+(int)SaveSystem.instance.scoreTop;
 
             //finishUi.GetComponent<TextMeshProUGUI>().text += "\nTap anywhere to restart";
-            finishUi.GetComponent<TextMeshProUGUI>().text += "\n"+localeStrings[localeCurrent+"_TutorialPressAny"];
+            if (Bridge.device.type.ToString() == "Desktop")
+            {
+                finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
+            }
+            else
+            {
+                finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAnyMobile"];
+            }
 
             //показывается не чаще раз в 3(?) игры, не реже раз в 8(?)
             //Debug.Log("adUnitCd" + adUnitCd + " vs prob"+ adUnitProbability + " : min"+ adUnitCdMin + " max" + adUnitCdMax);
