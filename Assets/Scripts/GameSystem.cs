@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using InstantGamesBridge;
-using InstantGamesBridge.Modules.Advertisement;
+//using InstantGamesBridge;
+//using InstantGamesBridge.Modules.Advertisement;
 /*using UnityEngine.Advertisements;*/
 
 public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener*/
@@ -76,11 +76,12 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
     }
     void InitializeLang()
     {
+        localeCurrent = "en";
         //Debug.Log("Language:" + Bridge.platform.language);
-        if (Application.absoluteURL.IndexOf("lang=ru") != -1 || Application.absoluteURL.IndexOf("yandex.ru") != -1)
-        {
-            localeCurrent = "ru";
-        }
+        //if (Application.absoluteURL.IndexOf("lang=ru") != -1 || Application.absoluteURL.IndexOf("yandex.ru") != -1)
+        //{
+        //    localeCurrent = "ru";
+        //}
 
         localeStrings.Add("ru_Score", "—чЄт");
         localeStrings.Add("en_Score", "Score");
@@ -160,7 +161,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         // Note that if the ad content wasn't previously loaded, this method will fail
         Debug.Log("Showing Ad: ShowInterstitial");
         //Advertisement.Show(_adUnitId, this);
-        Bridge.advertisement.ShowInterstitial();
+        //Bridge.advertisement.ShowInterstitial();
     }
     // Implement Load Listener and Show Listener interface methods:  
     public void OnUnityAdsAdLoaded(string adUnitId)
@@ -183,7 +184,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         SaveSystem.instance.Load();
         adUnitCd = SaveSystem.instance.adUnitCd;
 
-        if (Bridge.advertisement.isBannerSupported)
+        /*if (Bridge.advertisement.isBannerSupported)
         {
             //Debug.Log("Showing Ad: ShowBanner");
             Bridge.advertisement.ShowBanner();
@@ -191,19 +192,19 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         else
         {
             Debug.Log("Showing Ad: false: !Bridge.advertisement.isBannerSupported");
-        }
+        }*/
 
         isMusicEnabled = SaveSystem.instance.isMusicEnabled;
         musicButton.GetComponent<Image>().color = isMusicEnabled ? Color.white : Color.red;
 
-        Debug.Log("Bridge.device.type:" + Bridge.device.type.ToString());
+        tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
+        /*Debug.Log("Bridge.device.type:" + Bridge.device.type.ToString());
         if (Bridge.device.type.ToString() == "Desktop")
         {
-            tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
         } else
         {
             tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControlMobile"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAnyMobile"];
-        }
+        }*/
 
         tutorialObject.transform.Find("TextTutorial (1)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"];
         tutorialObject.transform.Find("TextTutorial (2)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialFuel"];
@@ -251,14 +252,15 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
             finishUi.GetComponent<TextMeshProUGUI>().text = "\t"+localeStrings[localeCurrent + "_Score"] + ": " + (int)score + "\n\t"+ localeStrings[localeCurrent + "_TopScore"] + ": "+(int)SaveSystem.instance.scoreTop;
 
             //finishUi.GetComponent<TextMeshProUGUI>().text += "\nTap anywhere to restart";
-            if (Bridge.device.type.ToString() == "Desktop")
+            finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
+            /*if (Bridge.device.type.ToString() == "Desktop")
             {
                 finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
             }
             else
             {
                 finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAnyMobile"];
-            }
+            }*/
 
             //показываетс€ не чаще раз в 3(?) игры, не реже раз в 8(?)
             //Debug.Log("adUnitCd" + adUnitCd + " vs prob"+ adUnitProbability + " : min"+ adUnitCdMin + " max" + adUnitCdMax);
@@ -269,7 +271,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
                 SaveSystem.instance.Save();
                 //UnityAds - disable for gold and mobile
                 //LoadAd();
-                ShowAd();
+                //ShowAd();
             }
             else {
                 //Debug.Log("adUnitCd:" + adUnitCd);
