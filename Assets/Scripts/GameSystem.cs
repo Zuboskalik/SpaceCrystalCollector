@@ -196,6 +196,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
 
         isMusicEnabled = SaveSystem.instance.isMusicEnabled;
         musicButton.GetComponent<Image>().color = isMusicEnabled ? Color.white : Color.red;
+        musicButton.GetComponentInChildren<Text>().text = "mus\n" + (isMusicEnabled ? "on" : "off");
 
         tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
         /*Debug.Log("Bridge.device.type:" + Bridge.device.type.ToString());

@@ -24,23 +24,31 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
-    public void Save() {
-        BinaryFormatter bf = new BinaryFormatter();
+    public void Save()
+    {
+        PlayerPrefs.SetFloat("scoreTop", scoreTop);
+        PlayerPrefs.SetInt("adUnitCd", adUnitCd);
+        PlayerPrefs.SetInt("isMusicEnabledInt", isMusicEnabled ? 1 : 0);
+        /*BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/playerInfo.dat");
 
         PlayerData data = new PlayerData();
-        data.scoreTop = scoreTop;
-        data.adUnitCd = adUnitCd;
-        data.isMusicEnabled = isMusicEnabled;
+
+        //data.scoreTop = scoreTop;
+        //data.adUnitCd = adUnitCd;
+        //data.isMusicEnabled = isMusicEnabled;
 
         bf.Serialize(file, data);
 
-        file.Close();
+        file.Close();*/
     }
 
     public void Load()
     {
-        if (File.Exists(Application.persistentDataPath + "/playerInfo.dat"))
+        scoreTop = PlayerPrefs.GetFloat("scoreTop");
+        adUnitCd = 0;// PlayerPrefs.GetInt("adUnitCd");
+        isMusicEnabled = PlayerPrefs.GetInt("isMusicEnabledInt") > 0 ? true : false;
+        /*if (File.Exists(Application.persistentDataPath + "/playerInfo.dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
@@ -49,9 +57,12 @@ public class SaveSystem : MonoBehaviour
             scoreTop = data.scoreTop;
             adUnitCd = data.adUnitCd;
             isMusicEnabled = data.isMusicEnabled;
+            scoreTop = data.scoreTop;
+            adUnitCd = data.adUnitCd;
+            isMusicEnabled = data.isMusicEnabled;
 
             GameSystem.instance.updateScore(0);
-        }
+        }*/
     }
 }
 
