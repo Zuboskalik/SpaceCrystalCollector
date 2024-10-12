@@ -160,9 +160,12 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         musicButton.GetComponent<Image>().color = isMusicEnabled ? Color.white : Color.red;
         musicButton.GetComponentInChildren<Text>().text = "mus\n" + (isMusicEnabled ? "on" : "off");
 
-        tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
         //Debug.Log("systemInfo.device.type:" + systemInfo.device.type);
         if (systemInfo.device.type == "desktop")
+        {
+            tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
+        }
+        else
         {
             tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControlMobile"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAnyMobile"];
         }
@@ -208,11 +211,20 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         {
             isFinishedTimer -= Time.deltaTime;
         }
-        if (isFinishedTimer < 0) {
+        if (isFinishedTimer < 0)
+        {
+            var systemInfo = CrazySDK.User.SystemInfo;
             isFinishedTimer = 0;
             finishUi.GetComponent<TextMeshProUGUI>().text = "\t"+localeStrings[localeCurrent + "_Score"] + ": " + (int)score + "\n\t"+ localeStrings[localeCurrent + "_TopScore"] + ": "+(int)SaveSystem.instance.scoreTop;
 
-            finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
+            if (systemInfo.device.type == "desktop")
+            {
+                finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
+            }
+            else
+            {
+                finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAnyMobile"];
+            }
 
             //показывается не чаще раз в 3(?) игры, не реже раз в 8(?)
             //Debug.Log("adUnitCd" + adUnitCd + " vs prob"+ adUnitProbability + " : min"+ adUnitCdMin + " max" + adUnitCdMax);
