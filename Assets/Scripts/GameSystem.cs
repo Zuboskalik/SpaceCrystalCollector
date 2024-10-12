@@ -4,26 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-//using InstantGamesBridge;
-//using InstantGamesBridge.Modules.Advertisement;
-/*using UnityEngine.Advertisements;*/
+using CrazyGames;
 
 public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener*/
 {
-    //[SerializeField] string _androidGameId = "4281345";
-    //[SerializeField] string _iOsGameId = "4281344";
-    //[SerializeField] bool _testMode = false;
-    //[SerializeField] bool _enablePerPlacementMode = true;
     private string _gameId;
-    //[SerializeField] string _androidAdUnitId = "Interstitial_Android";
-    //[SerializeField] string _iOsAdUnitId = "Interstitial_iOS";
     string _adUnitId;
 
     float adUnitProbability = 0.6f;
-    int adUnitCdSeconds = 30;
     int adUnitCdMax = 10;
     int adUnitCdMin = 3;
     public int adUnitCd = 0;
+    bool adActive = false;
 
     public static GameSystem instance;
     public PlayerController player;
@@ -77,11 +69,6 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
     void InitializeLang()
     {
         localeCurrent = "en";
-        //Debug.Log("Language:" + Bridge.platform.language);
-        //if (Application.absoluteURL.IndexOf("lang=ru") != -1 || Application.absoluteURL.IndexOf("yandex.ru") != -1)
-        //{
-        //    localeCurrent = "ru";
-        //}
 
         localeStrings.Add("ru_Score", "—чЄт");
         localeStrings.Add("en_Score", "Score");
@@ -129,55 +116,29 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
 
     public void InitializeAds()
     {
-        //Bridge.advertisement.SetMinimumDelayBetweenInterstitial(adUnitCdSeconds);
-        /*_adUnitId = (Application.platform == RuntimePlatform.IPhonePlayer)
-            ? _iOsAdUnitId
-            : _androidAdUnitId;
-
-        _gameId = (Application.platform == RuntimePlatform.IPhonePlayer)
-            ? _iOsGameId
-            : _androidGameId;
-        Advertisement.Initialize(_gameId, _testMode, _enablePerPlacementMode, this);*/
+        CrazySDK.Init(() => { OnInitializationComplete(); });
     }
+
     public void OnInitializationComplete()
     {
-        /*Debug.Log("Unity Ads initialization complete.");*/
-        Debug.Log("Yandex Ads initialization complete.");
+        //Debug.Log("Crazy Games Ads initialization complete.");
     }
-    /*public void OnInitializationFailed(UnityAdsInitializationError error, string message)
-    {
-        Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
-    }*/
-    // Load content to the Ad Unit:
-    public void LoadAd()
-    {
-        // IMPORTANT! Only load content AFTER initialization (in this example, initialization is handled in a different script).
-        //Debug.Log("Loading Ad: " + _adUnitId);
-        //Advertisement.Load(_adUnitId, this);
-    }
-    // Show the loaded content in the Ad Unit: 
+
     public void ShowAd()
     {
         // Note that if the ad content wasn't previously loaded, this method will fail
         Debug.Log("Showing Ad: ShowInterstitial");
-        //Advertisement.Show(_adUnitId, this);
-        //Bridge.advertisement.ShowInterstitial();
+        CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, () =>
+        {
+            adActive = true;
+        }, (error) =>
+        {
+            adActive = false;
+        }, () =>
+        {
+            adActive = false;
+        });
     }
-    // Implement Load Listener and Show Listener interface methods:  
-    public void OnUnityAdsAdLoaded(string adUnitId)
-    {
-        // Optionally execute code if the Ad Unit successfully loads content.
-    }
-    /*public void OnUnityAdsFailedToLoad(string adUnitId, UnityAdsLoadError error, string message)
-    {
-        Debug.Log($"Error loading Ad Unit: {adUnitId} - {error.ToString()} - {message}");
-        // Optionally execite code if the Ad Unit fails to load, such as attempting to try again.
-    }
-    public void OnUnityAdsShowFailure(string adUnitId, UnityAdsShowError error, string message)
-    {
-        Debug.Log($"Error showing Ad Unit {adUnitId}: {error.ToString()} - {message}");
-        // Optionally execite code if the Ad Unit fails to show, such as loading another ad.
-    }*/
 
     private void Start()
     {
@@ -252,16 +213,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
             isFinishedTimer = 0;
             finishUi.GetComponent<TextMeshProUGUI>().text = "\t"+localeStrings[localeCurrent + "_Score"] + ": " + (int)score + "\n\t"+ localeStrings[localeCurrent + "_TopScore"] + ": "+(int)SaveSystem.instance.scoreTop;
 
-            //finishUi.GetComponent<TextMeshProUGUI>().text += "\nTap anywhere to restart";
             finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
-            /*if (Bridge.device.type.ToString() == "Desktop")
-            {
-                finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
-            }
-            else
-            {
-                finishUi.GetComponent<TextMeshProUGUI>().text += "\n" + localeStrings[localeCurrent + "_TutorialPressAnyMobile"];
-            }*/
 
             //показываетс€ не чаще раз в 3(?) игры, не реже раз в 8(?)
             //Debug.Log("adUnitCd" + adUnitCd + " vs prob"+ adUnitProbability + " : min"+ adUnitCdMin + " max" + adUnitCdMax);
@@ -270,9 +222,8 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
                 adUnitCd = 0;
                 SaveSystem.instance.adUnitCd = adUnitCd;
                 SaveSystem.instance.Save();
-                //UnityAds - disable for gold and mobile
-                //LoadAd();
-                //ShowAd();
+                
+                ShowAd();
             }
             else {
                 //Debug.Log("adUnitCd:" + adUnitCd);
@@ -288,7 +239,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         {
             if ((Input.touchCount > 0) || (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)))
             {
-                if (!isFinished)
+                if (!isFinished && !adActive)
                 {
                     SaveSystem.instance.Load();
                     isPaused = false;
