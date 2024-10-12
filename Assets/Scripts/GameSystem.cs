@@ -122,12 +122,13 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
     public void OnInitializationComplete()
     {
         //Debug.Log("Crazy Games Ads initialization complete.");
+        CrazySDK.Banner.RefreshBanners();
     }
 
     public void ShowAd()
     {
         // Note that if the ad content wasn't previously loaded, this method will fail
-        Debug.Log("Showing Ad: ShowInterstitial");
+        //Debug.Log("Showing Ad: ShowInterstitial");
         CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, () =>
         {
             adActive = true;
@@ -145,16 +146,6 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         SaveSystem.instance.Load();
         adUnitCd = SaveSystem.instance.adUnitCd;
         var systemInfo = CrazySDK.User.SystemInfo;
-
-        /*if (Bridge.advertisement.isBannerSupported)
-        {
-            //Debug.Log("Showing Ad: ShowBanner");
-            Bridge.advertisement.ShowBanner();
-        }
-        else
-        {
-            Debug.Log("Showing Ad: false: !Bridge.advertisement.isBannerSupported");
-        }*/
 
         isMusicEnabled = SaveSystem.instance.isMusicEnabled;
         musicButton.GetComponent<Image>().color = isMusicEnabled ? Color.white : Color.red;
@@ -253,6 +244,8 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
                 if (!isFinished && !adActive)
                 {
                     SaveSystem.instance.Load();
+                    CrazySDK.Game.GameplayStart();
+                    CrazySDK.Banner.RefreshBanners();
                     isPaused = false;
                     player.isUncontrollable = false;
                     tutorialObject.GetComponent<Canvas>().enabled = false;
@@ -289,8 +282,12 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         isFinished = true;
         isFinishedTimer = 0.5f;
 
+        CrazySDK.Game.GameplayStop();
+
         if (score > SaveSystem.instance.scoreTop)
         {
+            CrazySDK.Game.HappyTime();
+
             SaveSystem.instance.scoreTop = score;
         }
 

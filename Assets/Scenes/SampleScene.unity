@@ -15514,11 +15514,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224151153673722542, guid: 6633892dd9ec0dc49bcdeac357ebc225, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 170
       objectReference: {fileID: 0}
     - target: {fileID: 224151153673722542, guid: 6633892dd9ec0dc49bcdeac357ebc225, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -35
       objectReference: {fileID: 0}
     - target: {fileID: 224881285900572546, guid: 6633892dd9ec0dc49bcdeac357ebc225, type: 3}
       propertyPath: m_Pivot.x
