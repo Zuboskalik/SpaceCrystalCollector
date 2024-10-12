@@ -144,6 +144,7 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
     {
         SaveSystem.instance.Load();
         adUnitCd = SaveSystem.instance.adUnitCd;
+        var systemInfo = CrazySDK.User.SystemInfo;
 
         /*if (Bridge.advertisement.isBannerSupported)
         {
@@ -160,13 +161,11 @@ public class GameSystem : MonoBehaviour/*, IUnityAdsInitializationListener, IUni
         musicButton.GetComponentInChildren<Text>().text = "mus\n" + (isMusicEnabled ? "on" : "off");
 
         tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAny"];
-        /*Debug.Log("Bridge.device.type:" + Bridge.device.type.ToString());
-        if (Bridge.device.type.ToString() == "Desktop")
-        {
-        } else
+        //Debug.Log("systemInfo.device.type:" + systemInfo.device.type);
+        if (systemInfo.device.type == "desktop")
         {
             tutorialObject.transform.Find("TextTutorial (3)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControlMobile"] + "\n" + localeStrings[localeCurrent + "_TutorialPressAnyMobile"];
-        }*/
+        }
 
         tutorialObject.transform.Find("TextTutorial (1)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialControl"];
         tutorialObject.transform.Find("TextTutorial (2)").GetComponent<TextMeshProUGUI>().text = localeStrings[localeCurrent + "_TutorialFuel"];
